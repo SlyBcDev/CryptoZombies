@@ -3,8 +3,14 @@ pragma solidity ^0.4.19;
 // On commence par importer le contrat ownable (issu et validé par la communauté ethereum)
 // qui permet de gérer l'apparetenance et le controle d'un contrat
 import "./ownable.sol"; 
+import "./safemath.sol";
+
 
 contract ZombieFactory is ownable{
+
+using SafeMath for uint256;
+using SafeMath32 for uint32;
+using SafeMath16 for uint16;
 
     // Les evenements permettent de communiquer avec le front end
     // Ils sont initiés en début de contrat et seront appelés plus tard.
@@ -41,7 +47,7 @@ contract ZombieFactory is ownable{
 
 
         zombieToOwner[id] = msg.sender; // l'id du zombie est attribuée à l'address de msg.sender
-        ownerZombieCount[msg.sender]++; // on augmente le nombre de zombie que possède msg.sender
+        ownerZombieCount[msg.sender] = ownerZombieCount[msg.sender].add(1); // on augmente le nombre de zombie que possède msg.sender
 
         // puis on appel l'evenement .
         NewZombie(id, _name, _dna);

@@ -25,16 +25,16 @@ contract ZombieHelper is ZombieFeeding{
    // la fonction pour monter d'un niveau en payant verfifie que le montant est ok puis upgrade un niveau
    function levelUp (uint _zombieId) external payable {
     require(msg.value == levelUpFee);
-    zombies[_zombieId].level ++;
+    zombies[_zombieId].level = zombies[_zombieId].level.add(1);
   }
 
   // permet aux zombie de niveau 2 et + de changer de nom
-  function changeName (uint _zombieId, string _newName) external aboveLevel(2, _zombieId) ownerOf(_zombieId){
+  function changeName (uint _zombieId, string _newName) external aboveLevel(2, _zombieId) onlyOwnerOf(_zombieId){
     zombies[_zombieId].name = _newName;
   }
 
   // permet aux zombie de niveau 20 et + de changer d'ADN 
-  function changeDna (uint _zombieId, uint _newDna) external aboveLevel(20, _zombieId) ownerOf(_zombieId){
+  function changeDna (uint _zombieId, uint _newDna) external aboveLevel(20, _zombieId) onlyOwnerOf(_zombieId){
     zombies[_zombieId].dna = _newDna;
   }
 
@@ -47,7 +47,7 @@ contract ZombieHelper is ZombieFeeding{
     for(uint i = 0; i < zombies.length; i++){ // on boucle sur tous les zombies existant
       if(zombieToOwner[i] == _owner){ // si le zombie appartient à _owner
         result[counter] = i; // on ajoute l'ID du zombie au tableau
-        counter ++; // on augmlente de 1 la qte de zombies de l'armée de owner.
+        counter = counter.add(1); // on augmlente de 1 la qte de zombies de l'armée de owner.
       }
     return result;
   }
